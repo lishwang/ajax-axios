@@ -105,7 +105,8 @@
       const xhr = new XMLHttpRequest();
       // 自动将响应结果进行 JSON.parse() 解析转换
       xhr.responseType = 'json';
-      xhr.open('get', 'http://127.0.0.1:8000/server-json');
+      // 在url后面拼接一个时间戳，保证每次请求的url都不一样，用于解决IE浏览器缓存响应结果的问题
+      xhr.open('get', 'http://127.0.0.1:8000/server-json?t=' + Date.now());
       xhr.send();
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
