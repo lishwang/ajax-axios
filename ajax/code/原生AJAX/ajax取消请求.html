@@ -24,6 +24,7 @@
 
 <body>
   <button>点击发送AJAX请求</button>
+  <button>取消请求</button>
   <div>服务端响应 get 内容在此展示：</div>
   <div id="get-result"></div>
   <hr>
@@ -34,33 +35,32 @@
   <script>
 
     // 发送 get 请求
-    const btn = document.getElementsByTagName('button')[0];
+    const btn = document.getElementsByTagName('button');
     const getResultDom = document.getElementById('get-result');
-    btn.onclick = () => {
+    let xhr;
+    // 发送请求
+    btn[0].onclick = () => {
       // 1、创建xhr对象实例
-      const xhr = new XMLHttpRequest();
+      xhr = new XMLHttpRequest();
       // 2、初始化 设置请求方法和url
-      xhr.open('get', 'http://127.0.0.1:8000/server?a=100&b=200');
+      xhr.open('get', 'http://127.0.0.1:8000/server-timeout');
       // 3、发送请求，可以携带JSON格式的数据
       xhr.send();
       // 4、监听当前状态
-      // readystate是xhr对象中的属性，表示状态，有五种状态 0 1 2 3 4；
-      // 0：表示未初始化； 1：表示open方法已经调用完毕； 2：表示send方法已经调用完毕；
-      // 3：服务端返回了部分的结果； 4：表示服务端返回了所有结果；
       xhr.onreadystatechange = () => {
         if (xhr.readyState === 4) {
           if (xhr.status >= 200 && xhr.status < 300) {
-            // 处理服务器响应结果：响应行、响应头、空行、响应体
-            console.log(xhr.status); // 响应状态码
-            console.log(xhr.statusText); // 响应状态字符串
-            console.log(xhr.getAllResponseHeaders()); // 所有响应头
-            console.log(xhr.response); // 响应体
+            // 处理服务器响应结果
             getResultDom.innerHTML = xhr.response; // 把响应结果展示在页面中
           } else {
             console.log('服务器响应失败')
           }
         }
       }
+    }
+    // 取消请求
+    btn[1].onclick = () => {
+      xhr.abort();
     }
   </script>
 </body>
