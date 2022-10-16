@@ -39,8 +39,20 @@
     btn.onclick = () => {
       // 1、创建xhr对象实例
       const xhr = new XMLHttpRequest();
+      // 设置超时时间
+      xhr.timeout = 2000;
+      // 超时回调
+      xhr.ontimeout = function () {
+        alert('网络超时！！！')
+      };
+      // 网络异常回调
+      xhr.onerror = function () {
+        alert('网络异常')
+      };
       // 2、初始化 设置请求方法和url
-      xhr.open('get', 'http://127.0.0.1:8000/server?a=100&b=200');
+      // xhr.open('get', 'http://127.0.0.1:8000/server?a=100&b=200');
+      // 网络超时验证
+      xhr.open('get', 'http://127.0.0.1:8000/server-timeout');
       // 3、发送请求，可以携带JSON格式的数据
       xhr.send();
       // 4、监听当前状态
@@ -121,6 +133,7 @@
         }
       }
     })
+
   </script>
 </body>
 

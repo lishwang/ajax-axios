@@ -33,6 +33,7 @@ app.all('/server', (request, response) => {
 });
 
 
+// 返回JSON格式的数据
 app.all('/server-json', (request, response) => {
   // 设置响应头 允许用户自定义请求头属性和内容，一般情况下，服务器不允许自定义请求头属性以及内容
   response.setHeader('Access-Control-Allow-Headers', '*');
@@ -44,6 +45,17 @@ app.all('/server-json', (request, response) => {
   };
   const str = JSON.stringify(data);
   response.send(str);
+});
+
+
+// 网络超时验证
+app.get('/server-timeout', (request, response) => {
+  // 设置响应头 设置允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  // 设置响应内容
+  setTimeout(() => {
+    response.send('HELLO AJAX GET');
+  }, 3000);
 });
 
 // 监听窗口启动服务
