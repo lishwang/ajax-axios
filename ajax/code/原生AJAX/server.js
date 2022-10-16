@@ -19,7 +19,17 @@ app.get('/server', (request, response) => {
   // 设置响应头 设置允许跨域
   response.setHeader('Access-Control-Allow-Origin', '*');
   // 设置响应内容
-  response.send('HELLO AJAX');
+  response.send('HELLO AJAX GET');
+});
+
+// all 可以接收任意类型的请求，get、post、put、delete等都可以
+app.all('/server', (request, response) => {
+  // 设置响应头 允许用户自定义请求头属性和内容，一般情况下，服务器不允许自定义请求头属性以及内容
+  response.setHeader('Access-Control-Allow-Headers', '*');
+  // 设置响应头 设置允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  // 设置响应内容
+  response.send('HELLO AJAX POST');
 });
 
 // 监听窗口启动服务
