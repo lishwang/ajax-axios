@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+  <style>
+    #get-result,
+    #post-result {
+      width: 200px;
+      height: 100px;
+      border: 3px solid #901;
+    }
+  </style>
+</head>
+
+<body>
+  <div>服务端响应 post 内容在此展示：</div>
+  <div id="post-result"></div>
+  <script>
+    // 发送 post 请求
+    const postResultDom = document.getElementById('post-result');
+    postResultDom.addEventListener('mouseover', () => {
+      // 1、创建xhr对象实例
+      const xhr = new XMLHttpRequest();
+      // 2、初始化 设置请求方法和url
+      xhr.open('post', 'http://127.0.0.1:8000/server?a=100&b=200');
+      // 设置请求头
+      // Content-Type 用于设置请求体内容的类型
+      // application/x-www-form-urlencoded 是固定写法
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      // 自定义请求头属性和内容，一般情况下，服务器不允许自定义请求头属性以及内容，需要在服务端做适配
+      xhr.setRequestHeader('wls-zidingyi', 'aaaaa');
+      // 3、发送请求，可以携带JSON格式的数据
+      xhr.send('c=300&d=400');
+      // 4、监听当前状态
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            // 处理服务器响应结果
+            postResultDom.innerHTML = xhr.response; // 把响应结果展示在页面中
+          } else {
+            console.log('服务器响应失败')
+          }
+        }
+      }
+    })
+  </script>
+</body>
+
+</html>

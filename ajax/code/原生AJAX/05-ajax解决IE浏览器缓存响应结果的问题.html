@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+  <style>
+    #get-result,
+    #post-result {
+      width: 200px;
+      height: 100px;
+      border: 3px solid #901;
+    }
+  </style>
+</head>
+
+<body>
+  <script>
+    // 服务端响应JSON格式数据
+    window.addEventListener('keydown', () => {
+      const xhr = new XMLHttpRequest();
+      // 自动将响应结果进行 JSON.parse() 解析转换
+      xhr.responseType = 'json';
+      // 在url后面拼接一个时间戳，保证每次请求的url都不一样，用于解决IE浏览器缓存响应结果的问题
+      xhr.open('get', 'http://127.0.0.1:8000/server-json?t=' + Date.now());
+      xhr.send();
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            // 方法一：手动对响应数据进行转换
+            // console.log(xhr.response);
+            // let data = JSON.parse(xhr.response);
+            // postResultDom.innerHTML = data.wls;
+            // 方法二：自动对响应数据进行转化
+            postResultDom.innerHTML = xhr.response.wls;
+          }
+        }
+      }
+    })
+
+  </script>
+</body>
+
+</html>
