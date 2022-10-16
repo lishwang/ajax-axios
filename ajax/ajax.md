@@ -1,0 +1,71 @@
+### XML简介
+
+- XML 可扩展标记语言，用来传输和存储数据；
+- HTML 用来在网页中呈现数据；
+- XML 和 HTML 类似，不同的是 HTML 中都是预定义标签，而 XML 中没有预定义标签，全都是自定义标签，用来表示一些数据；
+- 曾经ajax中数据的传输都是用的 XML，现在使用的 JSON字符串；
+
+### ajax的特点
+
+- 在网页不刷新的情况下向服务端发送http请求，得到http响应
+
+##### 优点：
+
+- 可以不刷新页面直接与服务器进行通信
+- 允许你根据用户事件来更新部分页面内容
+
+##### 缺点：
+
+- 没有浏览历史，不能回退
+- 存在跨域问题（同源策略）
+- SEO（搜索引擎优化） 不友好
+
+### HTTP 协议
+
+- HTTP协议，超文本传输协议，协议详细规定了浏览器和万维网服务器之间互相通信的规则；
+
+### express 框架 搭建简单的服务
+
+##### 使用步骤
+
+- 初始化包管理工具
+
+  npm init -y
+
+- 安装 express
+
+  npm install express
+
+- 使用 express 框架搭建简单的服务器，代码如下：
+
+  ```
+  # js 文件内
+  /**
+   * 执行该文件：
+   * 先 cd 到该文件所在层级
+   * 再执行 node + 文件名
+   * 然后即可在页面中访问 http://127.0.0.1:8000/ 查看运行结果
+   */
+  
+  // 引入express框架
+  const { response } = require('express');
+  const express = require('express');
+  
+  // 创建应用对象
+  const app = express();
+  
+  // 创建路由规则
+  // request 对请求报文的封装
+  // response 对响应报文的封装
+  app.get('/', (request, response) => {
+    // 设置响应内容
+    response.send('HELLO express');
+  });
+  
+  // 监听窗口启动服务
+  app.listen(8000, () => {
+    console.log('服务已经启动，8000端口监听中...')
+  })
+  ```
+
+  
