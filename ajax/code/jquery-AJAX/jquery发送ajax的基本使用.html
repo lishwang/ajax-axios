@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css"
+  >
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2 class="page-header">jquery发送ajax请求</h2>
+    <button class="btn btn-primary">GET</button>
+    <button class="btn btn-danger">POST</button>
+    <button class="btn btn-info">通用型方法ajax</button>
+  </div>
+
+  <script>
+    // get
+    $('button').eq(0).click(() => {
+      $.get('http://127.0.0.1:8000/jquery-server', { a: 100, b: 200 }, function (data) {
+        console.log(data);
+      })
+    });
+    // post
+    $('button').eq(1).click(() => {
+      $.post('http://127.0.0.1:8000/jquery-server', { a: 100, b: 200 }, function (data) {
+        console.log(data);
+      })
+    });
+    // get-json格式数据
+    // 参数一：请求url； 参数二：查询字符串（请求数据）； 参数三：是否处理服务器返回的JSON格式的数据（JSON.parse()处理）
+    $('button').eq(0).click(() => {
+      $.get('http://127.0.0.1:8000/jquery-server-json', { a: 100, b: 200 }, function (data) {
+        console.log(data);
+      })
+    }, 'json');
+    // post-json格式数据
+    $('button').eq(1).click(() => {
+      $.post('http://127.0.0.1:8000/jquery-server-json', { a: 100, b: 200 }, function (data) {
+        console.log(data);
+      })
+    }, 'json');
+  </script>
+</body>
+
+</html>

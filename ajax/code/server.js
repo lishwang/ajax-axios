@@ -58,6 +58,24 @@ app.get('/server-timeout', (request, response) => {
   }, 3000);
 });
 
+
+// jquery-server
+app.all('/jquery-server', (request, response) => {
+  // 设置响应头 设置允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  // 设置响应内容
+  response.send('HELLO AJAX GET');
+});
+
+// jquery-server-json
+app.all('/jquery-server-json', (request, response) => {
+  // 设置响应头 设置允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  // 设置响应内容
+  let data = { aa: '123' }
+  response.send(JSON.stringify(data));
+});
+
 // 监听窗口启动服务
 app.listen(8000, () => {
   console.log('服务已经启动，8000端口监听中...')
