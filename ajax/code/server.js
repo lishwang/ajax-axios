@@ -91,6 +91,17 @@ app.all('/jquery-server-json-headers', (request, response) => {
   response.send(JSON.stringify(data));
 });
 
+// axios-server-json-自定义请求头
+app.all('/axios-server', (request, response) => {
+  // 设置响应头 允许用户自定义请求头属性和内容，一般情况下，服务器不允许自定义请求头属性以及内容
+  response.setHeader('Access-Control-Allow-Headers', '*');
+  // 设置响应头 设置允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  // 设置响应内容
+  let data = { aa: '123' }
+  response.send(JSON.stringify(data));
+});
+
 // 监听窗口启动服务
 app.listen(8000, () => {
   console.log('服务已经启动，8000端口监听中...')

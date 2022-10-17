@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>axios</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.1.2/axios.min.js"></script>
+</head>
+
+<body>
+  <button>GET</button>
+  <button>POST</button>
+  <button>AJSX</button>
+
+  <script>
+    // 配置 baseURL
+    axios.defaults.baseURL = 'http://127.0.0.1:8000';
+    const btn = document.querySelectorAll('button');
+    btn[0].onclick = () => {
+      /**
+       * axios的get请求：
+       * 参数一：url
+       * 参数二：其他配置
+      */
+      axios.get('/axios-server', {
+        // 查询参数
+        params: {
+          a: 100,
+          b: 200,
+        },
+        // 自定义请求头
+        headers: {
+          aaa: 'wls',
+          age: 20
+        }
+      }).then(res => {
+        console.log(res);
+      })
+    }
+
+    // POST
+    btn[1].onclick = () => {
+      /**
+       * axios的post请求：
+       * 参数一：url
+       * 参数二：请求体；
+       * 参数三：其他配置
+      */
+      axios.post('/axios-server', {
+        length: '18cm',
+        width: '5cm'
+      }, {
+        // 查询参数
+        params: {
+          a: 100,
+          b: 200,
+        },
+        // 自定义请求头
+        headers: {
+          aaa: 'wls',
+          age: 20
+        }
+      }).then(res => {
+        console.log(res);
+      })
+    }
+  </script>
+</body>
+
+</html>
