@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>fetch</title>
+</head>
+
+<body>
+  <button>GET</button>
+  <script>
+    const btn = document.querySelector('button');
+    btn.onclick = () => {
+      /**
+       * fetch 发送 ajax 请求
+       * 参数一：url
+       * 参数二：其他配置对象
+       * 返回值：promise对象
+      */
+      fetch('http://127.0.0.1:8000/fetch-server', {
+        // 请求方法
+        method: 'POST',
+        // 请求体
+        body: 'width=200cm&length=180cm',
+        // 自定义请求头
+        headers: {
+          aaa: 'wls',
+          age: 20
+        }
+      }).then(res => {
+        console.log(111, res);
+        // return res.text(); // 返回json字符串
+        return res.json(); // 解析json字符串，返回对象等
+      }).then(res => {
+        console.log(222, res);
+      })
+    }
+  </script>
+</body>
+
+</html>

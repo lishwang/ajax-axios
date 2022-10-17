@@ -32,6 +32,7 @@
        * axios的get请求：
        * 参数一：url
        * 参数二：其他配置
+       * 返回值：promise对象
       */
       axios.get('/axios-server', {
         // 查询参数
@@ -56,6 +57,7 @@
        * 参数一：url
        * 参数二：请求体；
        * 参数三：其他配置
+       * 返回值：promise对象
       */
       axios.post('/axios-server', {
         length: '18cm',
@@ -77,6 +79,7 @@
     }
 
     // axios 发送请求的通用的方式
+    // 返回值：promise对象
     btn[2].onclick = () => {
       axios({
         // 请求方法
