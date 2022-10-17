@@ -24,6 +24,9 @@
     // 配置 baseURL
     axios.defaults.baseURL = 'http://127.0.0.1:8000';
     const btn = document.querySelectorAll('button');
+
+    // axios发送请求的基本方式
+    // axios 发送 GET 请求
     btn[0].onclick = () => {
       /**
        * axios的get请求：
@@ -46,7 +49,7 @@
       })
     }
 
-    // POST
+    // axios 发送 POST 请求
     btn[1].onclick = () => {
       /**
        * axios的post请求：
@@ -64,6 +67,33 @@
           b: 200,
         },
         // 自定义请求头
+        headers: {
+          aaa: 'wls',
+          age: 20
+        }
+      }).then(res => {
+        console.log(res);
+      })
+    }
+
+    // axios 发送请求的通用的方式
+    btn[2].onclick = () => {
+      axios({
+        // 请求方法
+        method: 'POST',
+        // url
+        url: '/axios-server',
+        // 查询参数
+        params: {
+          a: 100,
+          b: 200,
+        },
+        // 请求体
+        data: {
+          length: '18cm',
+          width: '5cm'
+        },
+        // 请求头信息
         headers: {
           aaa: 'wls',
           age: 20
