@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+</head>
+
+<body>
+  <h1>同源策略</h1>
+  <p>直接访问 http://127.0.0.1:9000/home 可以打开这个页面；
+    因为这个页面是由服务端直接返回当前这个文件的绝对路径（文件）给浏览器，然后被浏览器直接解析展示到页面上；
+    因此，这个页面的地址是 http://127.0.0.1:9000/home；
+    而且发送getData接口的url是 http://127.0.0.1:9000/getData；
+    两者同源，因此请求的 url 可以简写
+  </p>
+  <button>获取数据</button>
+
+  <script>
+    const btn = document.querySelector('button');
+    btn.onclick = () => {
+      const xhr = new XMLHttpRequest();
+      // 因为这里是满足同源策略的，因此 url 可以简写
+      xhr.open('GET', '/getData');
+      xhr.send();
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            console.log(xhr.response);
+          }
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

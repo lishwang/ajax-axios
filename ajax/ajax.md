@@ -344,3 +344,7 @@ app.all('/jquery-server-json', (request, response) => {
 });
 ```
 
+### 同源策略
+
+- 同源：协议、域名、端口号 完全相同；
+- 跨域：违背同源策略就是跨域；
