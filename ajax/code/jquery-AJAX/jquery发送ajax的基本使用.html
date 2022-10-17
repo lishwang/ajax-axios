@@ -12,11 +12,19 @@
     content="width=device-width, initial-scale=1.0"
   >
   <title>Document</title>
+  <!-- 
+    crossorigin="anonymous" 是一个跨源请求的属性设置，anonymous是匿名的意思，加上这个属性后，
+    再向后面的href或者src地址请求资源时不会携带当前域名下的cookie
+   -->
   <link
+    crossorigin="anonymous"
     rel="stylesheet"
     href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css"
   >
-  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <script
+    crossorigin="anonymous"
+    src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"
+  ></script>
 </head>
 
 <body>
@@ -28,18 +36,46 @@
   </div>
 
   <script>
-    // get
+    // $.get(xxx,xxx,xxx,xxx)
     $('button').eq(0).click(() => {
       $.get('http://127.0.0.1:8000/jquery-server', { a: 100, b: 200 }, function (data) {
         console.log(data);
       })
     });
-    // post
+    // $.post(xxx,xxx,xxx,xxx)
     $('button').eq(1).click(() => {
       $.post('http://127.0.0.1:8000/jquery-server', { a: 100, b: 200 }, function (data) {
         console.log(data);
       })
     });
+    // $.ajax({xxx,xxx,xxx,...})
+    $('button').eq(2).click(() => {
+      $.ajax({
+        // url
+        url: 'http://127.0.0.1:8000/jquery-server-json-headers',
+        // 参数
+        data: { a: 100, b: 200 },
+        // 请求类型
+        type: 'GET',
+        // 响应体结果类型设置
+        dataType: 'json',
+        // 超时时间
+        timeout: 2000,
+        // 成功的回调
+        success: data => {
+          console.log(data);
+        },
+        // 失败的回调（超时、网络异常等）
+        error: err => {
+          console.log(err)
+        },
+        // 请求头设置（分为预定义属性和自定义属性，如果添加自定义请求头，需要服务端代码做适配）
+        headers: {
+          c: 300,
+          d: 400,
+        },
+      })
+    })
     // get-json格式数据
     // 参数一：请求url； 参数二：查询字符串（请求数据）； 参数三：是否处理服务器返回的JSON格式的数据（JSON.parse()处理）
     $('button').eq(0).click(() => {

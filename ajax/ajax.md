@@ -267,6 +267,8 @@ app.get('/server-timeout', (request, response) => {
 
 ### jquery 发送 ajax 请求
 
+- 采用 link 或者 script 标签引入 cdn 地址时，设置 crossorigin="anonymous" 这个属性，是一个跨源请求的属性设置，anonymous是匿名的意思，加上这个属性后，再向后面的href或者src地址请求资源时不会携带当前域名下的cookie；
+
 ```
 # html 文件
 <!DOCTYPE html>
@@ -276,8 +278,12 @@ app.get('/server-timeout', (request, response) => {
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
-  <link rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css">
-  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <!-- 
+    crossorigin="anonymous" 是一个跨源请求的属性设置，anonymous是匿名的意思，加上这个属性后，
+    再向后面的href或者src地址请求资源时不会携带当前域名下的cookie
+   -->
+  <link crossorigin="anonymous" rel="stylesheet" href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.2.2/css/bootstrap.min.css">
+  <script crossorigin="anonymous" src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 </head>
 
 <body>
