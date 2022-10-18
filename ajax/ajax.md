@@ -348,3 +348,56 @@ app.all('/jquery-server-json', (request, response) => {
 
 - 同源：协议、域名、端口号 完全相同；
 - 跨域：违背同源策略就是跨域；
+
+### 解决跨域
+
+##### JSONP
+
+- JSONP 是一个非官方的跨域解决方案，只支持 get 请求；
+- 在网页有一些标签天生具有跨域能力，比如  img、link、iframe、script ；JSONP 就是利用 script 这些标签的跨域能力来发送请求的；
+- 注意：利用 script 可以发送 JSONP 请求，但是 请求返回的内容必须是 JS 代码，这样前端的 JS 引擎才能解析并执行里面的内容；例如 ` console.log('xxx'); `
+
+###### JSONP实现跨域的原理
+
+- 服务端返回结果的形式是 函数的调用，这个函数的参数就是服务器想给客户端返回的结果数据，这个函数需要在客户端提前声明，在这个函数中，客户端可以处理服务端返回的数据；
+- 代码实现如下：
+
+```
+##### 客户端代码 .html文件
+<div id="result"></div>
+<script>
+    // 定义函数，用于后面服务端返回这个函数的调用，并由服务端给这个函数传递入参（服务端返回的实际数据）
+    function handle (data) {
+        // 在这里对服务端返回的数据进行处理
+        const result = document.getElementById('result');
+        result.innerHTML = data.name;
+    }
+</script>
+<!-- 跨域，本地在浏览器打开html文件，协议为 file:/// ；请求url协议为 http，协议不同，因此跨域，使用script可以跨域get请求 -->
+<script src="http://127.0.0.1:8000/jsonp-server"></script>
+
+##### 服务端代码 .js代码
+
+// 引入express框架
+const express = require('express');
+
+// 创建应用对象
+const app = express();
+
+// jsonp-server 跨域
+app.all('/jsonp-server', (request, response) => {
+  // 设置响应内容，最好不要直接返回一个字符串，应该返回一个js代码，比如 aaa = 'sss';
+  // response.send('sss');
+  let data = { name: 'wls' }
+  let str = JSON.stringify(data)
+  // end 不会加特殊响应头
+  // 返回结果的形式是 函数的调用，这个函数的参数就是服务器想给客户端返回的结果数据，这个函数需要在客户端提前声明
+  response.end(`handle(${str})`);
+});
+
+// 监听窗口启动服务
+app.listen(8000, () => {
+  console.log('服务已经启动，8000端口监听中...')
+})
+```
+

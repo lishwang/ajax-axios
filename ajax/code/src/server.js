@@ -10,7 +10,6 @@
  */
 
 // 引入express框架
-const { response } = require('express');
 const express = require('express');
 
 // 创建应用对象
@@ -112,6 +111,19 @@ app.all('/fetch-server', (request, response) => {
   // 设置响应内容
   let data = { aa: '123' }
   response.send(JSON.stringify(data));
+});
+
+
+
+// jsonp-server 跨域
+app.all('/jsonp-server', (request, response) => {
+  // 设置响应内容
+  // response.send('sss');
+  let data = { name: 'wls' }
+  let str = JSON.stringify(data)
+  // end 不会加特殊响应头
+  // 返回结果的形式是 函数的调用，这个函数的参数就是服务器想给客户端返回的结果数据，这个函数需要在客户端提前声明
+  response.end(`handle(${str})`);
 });
 
 // 监听窗口启动服务

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="result"></div>
+  <script>
+    // 定义函数，用于后面服务端返回这个函数的调用，并由服务端给这个函数传递入参（服务端返回的实际数据）
+    function handle (data) {
+      // 在这里对服务端返回的数据进行处理
+      const result = document.getElementById('result');
+      result.innerHTML = data.name;
+    }
+  </script>
+  <!-- <script src="./app.js"></script> -->
+  <!-- 跨域，这个链接是由本地用 live server 打开当前页面时，请求 ./app.js 文件时发送的URL，本质上也是一种跨域 -->
+  <!-- <script
+    src="http://127.0.0.1:5500/ajax/code/src/06-%E8%B7%A8%E5%9F%9F/02-JSONP%E8%A7%A3%E5%86%B3%E8%B7%A8%E5%9F%9F/app.js"
+  ></script> -->
+
+  <!-- 跨域 -->
+  <script src="http://127.0.0.1:8000/jsonp-server"></script>
+</body>
+
+</html>
