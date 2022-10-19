@@ -401,3 +401,143 @@ app.listen(8000, () => {
 })
 ```
 
+##### jQuery 发送 JSONP 请求
+
+- jquery发送JSONP请求时，url后面要拼接上 ?callback=? 这个字符串，在浏览器请求载荷中可以看到，jquery自动生成了这个回调函数名字为 jQuery+随机值 组成；可以在服务器中通过 request.query.callback 来获取这个函数名，然后返回这个函数名的调用，并传入数据；这样在客户端就可以直接拿到服务器返回的实际数据；
+
+```
+##### 客户端代码 .html文件
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    p {
+      width: 200px;
+      height: 100px;
+      border: 1px solid #f00;
+      text-align: center;
+    }
+  </style>
+  <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+</head>
+<body>
+  <button>jQuery发JSONP请求</button>
+  <p></p>
+  <script>
+    $('button').eq(0).click(() => {
+      // jquery发送JSONP请求时，url后面要拼接上 ?callback=? 这个字符串，在浏览器请求载荷中可以看到，
+      // jquery自动生成了这个回调函数名字为 jQuery+随机值 组成；
+      // 可以在服务器中通过 request.query.callback 来获取这个函数名，然后返回这个函数名的调用，并传入数据；
+      // 这样在客户端就可以直接拿到服务器返回的实际数据；
+      $.getJSON('http://127.0.0.1:9999/jquery-jsonp?callback=?', (data) => {
+        $('p').eq(0).html(`返回值：${data.msg}<br/>换行`);
+      })
+    })
+  </script>
+</body>
+</html>
+
+##### 服务端代码 .js文件
+
+const express = require('express');
+
+let app = express();
+
+// jQuery发送JSONP接口
+app.all('/jquery-jsonp', (request, response) => {
+  // 获取jQuery生成的随机函数名
+  let functionName = request.query.callback;
+  // 定义返回数据
+  let data = {
+    exit: true,
+    msg: '测试成功',
+  };
+  let str = JSON.stringify(data);
+  // 返回函数调用
+  response.send(`${functionName}(${str})`);
+})
+
+app.listen('9999', () => {
+  console.log('9999端口开启中...');
+})
+```
+
+##### CORS 解决跨域问题
+
+- CORS ：跨域资源共享，CORS 是官方的跨域解决方案，它的特点是不需要在客户端做任何特殊的操作，完全在服务器中进行处理，支持 get 和 post 请求。跨域资源共享标准新增了一组 HTTP 首部字段，允许服务器声明哪些源站通过浏览器有权限访问哪些资源；
+
+- 原理：CORS 是通过设置一个相应头来告诉浏览器，该请求允许跨域，浏览器收到该响应后就会对响应放行；
+- 常用的服务端设置
+  - 设置允许跨域
+      ` response.setHeader('Access-Control-Allow-Origin', '*'); `
+  - 设置允许自定义请求头内容
+     ` response.setHeader('Access-Control-Allow-Headers', '*'); `
+  - 设置允许所有的HTTP方法访问（默认是get/post，设置后，可以允许所有的方法访问）
+      ` response.setHeader('Access-Control-Allow-Methods', '*'); `
+- 练习：
+
+```
+##### 客户端代码 .html文件
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    p {
+      width: 200px;
+      height: 100px;
+      border: 1px solid #f00;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <button>跨域CORS配置</button>
+  <p></p>
+  <script>
+    const btn = document.querySelector('button');
+    const p = document.querySelector('p');
+    btn.onclick = function () {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'http://127.0.0.1:8888/cors-server');
+      xhr.send();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+          if (xhr.status >= 200 && xhr.status < 300) {
+            p.innerHTML = xhr.response;
+          }
+        }
+      }
+    }
+  </script>
+</body>
+</html>
+
+##### 服务端代码 .js文件
+
+const express = require('express');
+
+const app = express();
+
+app.all('/cors-server', (request, response) => {
+  // 设置允许跨域
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  // 设置允许自定义请求头
+  response.setHeader('Access-Control-Allow-Headers', '*');
+  // 设置允许所有的HTTP方法访问（默认是get/post，设置后，可以允许所有的方法访问）
+  response.setHeader('Access-Control-Allow-Methods', '*');
+  response.send('hello CORS');
+})
+
+app.listen('8888', () => {
+  console.log('8888端口服务已启动...')
+})
+```
+
