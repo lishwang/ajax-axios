@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text">
+  <p></p>
+  <script>
+    let inputDom = document.querySelector('input');
+    let pDom = document.querySelector('p');
+    // 创建函数，服务器中会调用该函数
+    function handle (data) {
+      inputDom.style.border = '1px solid #f00';
+      pDom.innerHTML = data.msg;
+    }
+    inputDom.onblur = function () {
+      // 这里的this指向调用者 input 这个元素，this.value 拿到的就是输入框的内容
+      let value = this.value;
+      // 创建script标签，用于借助script的src实现JSONP跨域，
+      // 注意，需要把创建的script标签添加到body中才能生效*****
+      const script = document.createElement('script');
+      script.src = 'http://127.0.0.1:9999/test-jsonp';
+      document.body.appendChild(script);
+    }
+  </script>
+</body>
+
+</html>
