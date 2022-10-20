@@ -20,17 +20,23 @@
   <button>发送 POST 请求</button>
   <button>发送 PUT 请求</button>
   <button>发送 DELETE 请求</button>
+  <button>发送 request 请求</button>
 
   <script>
     const btn = document.getElementsByTagName('button');
 
     // GET
     btn[0].onclick = function () {
-      // 发送 AJAX 请求
-      axios({
-        method: 'GET',
-        url: 'http://127.0.0.1:3000/posts/1',
-      }).then(res => {
+      // 发送 axios 请求（方式一）
+      // axios({
+      //   method: 'GET',
+      //   url: 'http://127.0.0.1:3000/posts/1',
+      // }).then(res => {
+      //   console.log(res);
+      // })
+
+      // 发送 axios 请求（方式二）
+      axios.get('http://127.0.0.1:3000/posts/1').then(res => {
         console.log(res);
       })
     }
@@ -38,14 +44,23 @@
 
     // POST 添加（向db.json文件内的posts对象添加内容）
     btn[1].onclick = function () {
-      // 发送 AJAX 请求
-      axios({
-        method: 'POST',
-        url: 'http://127.0.0.1:3000/posts',
-        data: {
-          title: 'wwww',
-          author: 'wls',
-        }
+      // 发送 axios 请求（方式一）
+      // axios({
+      //   method: 'POST',
+      //   url: 'http://127.0.0.1:3000/posts',
+      //   data: {
+      //     title: 'wwww',
+      //     author: 'wls',
+      //   }
+      // }).then(res => {
+      //   console.log(res);
+      // })
+
+      // 发送 axios 请求（方式二）
+      // 参数一：url； 参数二：请求体； 参数三：配置对象
+      axios.post('http://127.0.0.1:3000/posts', {
+        title: 'wwww',
+        author: 'wls',
       }).then(res => {
         console.log(res);
       })
@@ -54,7 +69,7 @@
 
     // PUT 修改（修改db.json文件内的posts对象中对应的id=3的内容）
     btn[2].onclick = function () {
-      // 发送 AJAX 请求
+      // 发送 axios 请求
       axios({
         method: 'PUT',
         url: 'http://127.0.0.1:3000/posts/3',
@@ -70,7 +85,7 @@
 
     // DELETE 删除（删除db.json文件内的posts对象中对应的id=4的内容）
     btn[3].onclick = function () {
-      // 发送 AJAX 请求
+      // 发送 axios 请求
       axios({
         method: 'DELETE',
         url: 'http://127.0.0.1:3000/posts/4',
@@ -78,6 +93,18 @@
           title: 'wwww-change',
           author: 'wls-change',
         }
+      }).then(res => {
+        console.log(res);
+      })
+    }
+
+
+    // request
+    btn[4].onclick = function () {
+      // 发送 axios 请求
+      axios.request({
+        method: 'GET',
+        url: 'http://127.0.0.1:3000/posts/1',
       }).then(res => {
         console.log(res);
       })
