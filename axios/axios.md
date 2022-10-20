@@ -15,3 +15,8 @@ npm install -g json-server
 
 ```
 
+
+
+### axios简介
+
+- axios 是一个基于 promise 的 HTTP 客户端，可以在 nodejs和浏览器 两个环境中运行；
