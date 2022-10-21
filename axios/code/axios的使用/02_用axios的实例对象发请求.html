@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta
+    http-equiv="X-UA-Compatible"
+    content="IE=edge"
+  >
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.1.2/axios.min.js"></script>
+</head>
+
+<body>
+  <button>发送 GET 请求</button>
+  <button>发送 POST 请求</button>
+  <button>发送 PUT 请求</button>
+  <button>发送 DELETE 请求</button>
+  <button>发送 request 请求</button>
+
+  <script>
+    const btn = document.getElementsByTagName('button');
+
+    // 创建 axios 实例对象，之后wlsRequest的使用方式和axios几乎是相同的，而且wlsRequest中的配置都是基础默认配置
+    const wlsRequest = axios.create({
+      // 设置基础请求类型为 GET
+      method: 'GET',
+      // 相当于设置 基础URL
+      baseURL: 'http://127.0.0.1:3000',
+      timeout: 3000,
+    })
+
+    // GET
+    btn[0].onclick = function () {
+      // 使用 wlsRequest 发送 axios 请求（方式一）
+      wlsRequest({
+        // method: 'GET', // 可省略
+        url: '/posts/1',
+      }).then(res => {
+        console.log(res);
+      })
+
+      // 使用 wlsRequest 发送 axios 请求（方式二）
+      // wlsRequest('/posts/1').then(res => {
+      //   console.log(res);
+      // })
+    }
+
+
+    // POST 添加（向db.json文件内的posts对象添加内容）
+    btn[1].onclick = function () {
+      // 发送 axios 请求（方式一）
+      // wlsRequest({
+      //   method: 'POST',
+      //   url: '/posts',
+      //   data: {
+      //     title: 'wwww',
+      //     author: 'wls',
+      //   }
+      // }).then(res => {
+      //   console.log(res);
+      // })
+
+      // 使用 wlsRequest 发送 axios 请求（方式二）
+      // 参数一：url； 参数二：请求体； 参数三：配置对象
+      wlsRequest.post('http://127.0.0.1:3000/posts', {
+        title: 'wwww',
+        author: 'wls',
+      }).then(res => {
+        console.log(res);
+      })
+    }
+
+  </script>
+</body>
+
+</html>
