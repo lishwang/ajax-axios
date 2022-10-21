@@ -152,6 +152,10 @@ app.get('/server-timeout', (request, response) => {
 
 ### ajax 发送 post 请求
 
+- content-type，传输数据类型，即服务器需要我们传送的数据类型
+
+  `  xhr.setRequestHeader ("content-type", "application/x-www-form-urlencoded" )  `
+
 ```
 # dom
 <div>服务端响应 post 内容在此展示：</div>
