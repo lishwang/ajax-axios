@@ -20,3 +20,21 @@ npm install -g json-server
 ### axios简介
 
 - axios 是一个基于 promise 的 HTTP 客户端，可以在 nodejs和浏览器 两个环境中运行；
+
+### axios的使用
+
+##### axios可以设置默认配置
+
+```
+### 设置默认的请求类型为 GET
+axios.defaults.method = 'GET';
+
+### 设置基础 URL
+axios.defaults.baseURL = 'http://127.0.0.1:8000';
+
+### 设置默认请求体参数
+axios.defaults.params = { id: 1 };
+
+### 基本上axios配置中的属性都可以设置默认值
+```
+
