@@ -13,6 +13,8 @@ npm install -g json-server
 3、在控制台执行 json-server --watch db.json 
 注：json-server 表示启用服务器， watch db.json 表示服务器数据在 db.json 这个文件内找
 
+4、在控制台执行 json-server --watch db.json -d 2000
+注： -d 2000 表示 delay 所有接口都延时2秒响应
 ```
 
 服务器端代码  db.json 文件，本次 axios 练习全部使用这个服务器及以下代码

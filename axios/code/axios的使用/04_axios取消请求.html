@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.1.2/axios.min.js"></script>
+</head>
+
+<body>
+  <button>发送 GET 请求</button>
+
+  <script>
+    const btn = document.getElementsByTagName('button');
+
+    /**
+     * axios取消请求分为三步：
+     * 1、声明一个全局变量，用于存储取消请求的函数
+     * 2、请求配置对象中添加 cancelToken 属性，属性值中给全局变量赋值取消请求的函数
+     * 3、想要取消请求时，直接执行这个全局变量中存储的函数即可
+    */
+    // GET
+    // 1、定义一个全局变量
+    let cancel = null;
+    btn[0].onclick = function () {
+      // 连续点击时，若上一次的请求还未结束，则取消上次请求
+      if (cancel !== null) {
+        cancel();
+        return;
+      }
+      axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:3000/posts/1',
+        // 2、请求配置对象中添加 CancelToken 属性
+        cancelToken: new axios.CancelToken(function (c) {
+          // 3、给全局变量赋值为取消请求的函数
+          cancel = c;
+        })
+      }).then(res => {
+        console.log(res, 'success');
+      }).catch(err => {
+        console.log(err, 'error');
+      }).finally(() => {
+        // 请求结束，将存储取消请求的函数的变量赋值为null
+        cancel = null;
+      })
+    }
+
+  </script>
+</body>
+
+</html>
