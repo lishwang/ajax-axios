@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="https://cdn.bootcdn.net/ajax/libs/axios/1.1.2/axios.min.js"></script>
+</head>
+
+<body>
+  <button>发送 GET 请求</button>
+
+  <script>
+    // 请求拦截器
+    axios.interceptors.request.use(function (config) {
+      console.log('request success 1')
+      // Do something before request is sent
+      return config;
+    }, function (error) {
+      console.log('request error 1')
+      // Do something with request error
+      return Promise.reject(error);
+    });
+    // 请求拦截器2
+    axios.interceptors.request.use(function (config) {
+      console.log('request success 2')
+      // Do something before request is sent
+      return config;
+    }, function (error) {
+      console.log('request error 2')
+      // Do something with request error
+      return Promise.reject(error);
+    });
+
+    // 响应拦截器
+    axios.interceptors.response.use(function (response) {
+      console.log('response success 1')
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, function (error) {
+      console.log('response error 1')
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      return Promise.reject(error);
+    });
+    // 响应拦截器2
+    axios.interceptors.response.use(function (response) {
+      console.log('response success 2')
+      // Any status code that lie within the range of 2xx cause this function to trigger
+      // Do something with response data
+      return response;
+    }, function (error) {
+      console.log('response error 2')
+      // Any status codes that falls outside the range of 2xx cause this function to trigger
+      // Do something with response error
+      return Promise.reject(error);
+    });
+
+
+    const btn = document.getElementsByTagName('button');
+
+    // GET
+    btn[0].onclick = function () {
+      axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:3000/posts/1',
+      }).then(res => {
+        console.log(res, 'success');
+      }).catch(err => {
+        console.log(err, 'error');
+      })
+    }
+
+    /**
+     * 拦截器打印输出顺序：2 1 1 2
+     * 具体原因看原码
+     */
+
+  </script>
+</body>
+
+</html>
