@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>01_axios结构的简单实现</title>
+</head>
+
+<body>
+  <script>
+    // Axios 构造函数
+    function Axios (config) {
+      // 初始化 default默认属性 与 interceptors拦截器
+      this.default = config;
+      this.interceptors = {
+        request: {},
+        response: {},
+      }
+    }
+
+    // Axios 构造函数 原型上添加相关的方法
+    Axios.prototype.request = function (config) {
+      // 发送 ajax 请求
+      console.log('发送 ajax 请求，请求类型为：' + config.method);
+    }
+    Axios.prototype.get = function (config) {
+      // get 等这些方法本质上还是调用 request 方法来发请求
+      return this.request({ method: 'GET' });
+    }
+    Axios.prototype.post = function (config) {
+      // get 等这些方法本质上还是调用 request 方法来发请求
+      return this.request({ method: 'POST' });
+    }
+
+    // 创建最终的 axios 实例（给request函数身上添加属性和方法，并返回得到 axios 实例）
+    function createInstance (config) {
+      // 实例化一个axios对象
+      let context = new Axios(config); // 此时可以这样使用 context.get()； 但是不可以这样使用 context({});
+      // 创建请求函数（由request改变this指向而来，返回值是一个函数）
+      let instance = Axios.prototype.request.bind(context); // 可以这样用 instance({}); 但是不可以这样用 instance.get();
+      // 将 Axios.prototype 中的属性方法添加到 instance 这个函数对象中，并改变指向
+      Object.keys(Axios.prototype).forEach(key => {
+        instance[key] = Axios.prototype[key].bind(context);
+      })
+      // 将 default默认属性 与 interceptors拦截器 添加到 instance 函数对象中
+      Object.keys(context).forEach(key => {
+        instance[key] = context[key];
+      })
+      return instance;
+    }
+
+    // 拿到 axios 实例
+    let my_axios = createInstance();
+    // 模拟调用axios，发送请求
+    my_axios({ method: 'GET' });
+  </script>
+</body>
+
+</html>
