@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 构造函数
+    function Axios (config) {
+      this.config = config;
+      this.interceptors = {
+        request: new InterceptorManager(),
+        response: new InterceptorManager(),
+      }
+    }
+    // 发送请求
+    Axios.prototype.request = function (config) {
+      // 创建一个 promise，在这里直接resolve写死为成功
+      let promise = Promise.resolve(config);
+      // 创建一个数组
+      const chains = [dispatchRequest, undefined];
+      // 处理拦截器
+      // 请求拦截器
+      this.interceptors.request.handlers.forEach(item => {
+        chains.unshift(item.fulfilled, item.reject)
+      })
+      // 响应拦截器
+      this.interceptors.response.handlers.forEach(item => {
+        chains.push(item.fulfilled, item.reject)
+      })
+      // 遍历执行 chains 里面的函数
+      while (chains.length > 0) {
+        promise = promise.then(chains.shift(), chains.shift());
+      }
+      return promise;
+    }
+
+    // 2、dispatchRequest 函数
+    function dispatchRequest (config) {
+      return new Promise((resolve, reject) => {
+        resolve({
+          status: 200,
+          statusText: 'ok',
+          data: [{ a: 'wls' }],
+        })
+      })
+    }
+
+    // 拦截器管理器构造函数
+    function InterceptorManager () {
+      this.handlers = [];
+    }
+    InterceptorManager.prototype.use = function (fulfilled, reject) {
+      this.handlers.push({
+        fulfilled,
+        reject
+      })
+    }
+
+    // 创建实例
+    let context = new Axios();
+    // 创建 axios 函数
+    let axios = Axios.prototype.request.bind(context);
+
+    // 将 实例上的 config 和 interceptors 添加到 axios 函数对象上
+    Object.keys(context).forEach(key => {
+      axios[key] = context[key];
+    })
+
+
+    /**
+     * 以下为功能测试代码
+    */
+    // 请求拦截器
+    axios.interceptors.request.use(function (config) {
+      console.log('request success 1')
+      return config;
+    }, function (error) {
+      console.log('request error 1')
+      return Promise.reject(error);
+    });
+    // 请求拦截器2
+    axios.interceptors.request.use(function (config) {
+      console.log('request success 2')
+      return config;
+    }, function (error) {
+      console.log('request error 2')
+      return Promise.reject(error);
+    });
+
+    // 响应拦截器
+    axios.interceptors.response.use(function (response) {
+      console.log('response success 1')
+      return response;
+    }, function (error) {
+      console.log('response error 1')
+      return Promise.reject(error);
+    });
+    // 响应拦截器2
+    axios.interceptors.response.use(function (response) {
+      console.log('response success 2')
+      return response;
+    }, function (error) {
+      console.log('response error 2')
+      return Promise.reject(error);
+    });
+
+    console.dir(axios);
+
+    // 5、发送 axios 请求
+    axios({
+      method: 'GET',
+      url: 'http://127.0.0.1:3000/posts/1'
+    }).then(res => {
+      console.log(res);
+    })
+  </script>
+</body>
+
+</html>
