@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <button>发送 GET 请求</button>
+  <script>
+    // 构造函数
+    function Axios (config) {
+      this.config = config;
+    }
+    // 原型 request 方法
+    Axios.prototype.request = function (config) {
+      return dispatchRequest(config);
+    }
+    // dispatchRequest 方法
+    function dispatchRequest (config) {
+      return xhrAdapter(config);
+    }
+    // xhrAdapter 方法
+    function xhrAdapter (config) {
+      // 发送 ajax 请求
+      return new Promise((resolve, reject) => {
+        let xhr = new XMLHttpRequest();
+        xhr.open(config.method, config.url);
+        xhr.send();
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status >= 200 && xhr.status < 300) {
+              resolve({
+                config: config,
+                data: xhr.response,
+                headers: xhr.getAllResponseHeaders(), // 字符串，但是在 axios 原码内部对其进行了格式化成对象，在此简化结果；
+                request: xhr,
+                status: xhr.status,
+                statusText: xhr.statusText,
+              });
+            } else {
+              reject(new Error('请求失败，失败的状态码为 ' + xhr.status));
+            }
+          }
+        }
+        if (config.cancelToken) {
+          // 改变 promise 的状态时会调用 .then 进而取消请求
+          config.cancelToken.promise.then(resolve => {
+            // 取消请求
+            xhr.abort();
+          })
+        }
+      })
+    }
+    // 创建实例
+    let context = new Axios({});
+    const axios = Axios.prototype.request.bind(context);
+
+    // CancelToken 构造函数
+    function CancelToken (executor) {
+      let resolvePromise;
+      this.promise = new Promise((resolve, reject) => {
+        // resolve 执行后会改变 promise 的状态为成功
+        resolvePromise = resolve;
+      })
+      executor(function () {
+        // resolvePromise 执行后会改变 promise 的状态为成功
+        resolvePromise();
+      });
+    };
+
+
+    /**
+     * 以下为测试代码
+    */
+    const btn = document.getElementsByTagName('button');
+    // GET
+    let cancel = null;
+    // cancelToken 取消请求的方法
+    let cancelToken = function () {
+      return new CancelToken(function (c) {
+        // 执行 c 或者 cancel 会改变 promise 的状态为成功，进行执行 xhr.abort() 取消请求
+        cancel = c;
+      })
+    }
+    btn[0].onclick = function () {
+      // 连续点击时，若上一次的请求还未结束，则取消上次请求
+      if (cancel !== null) {
+        cancel();
+        return;
+      }
+      axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:3000/posts/1',
+        cancelToken: cancelToken(),
+      }).then(res => {
+        console.log(res, 'success');
+      }).catch(err => {
+        console.log(err, 'error');
+      }).finally(() => {
+        // 请求结束，将存储取消请求的函数的变量赋值为null
+        cancel = null;
+      })
+    }
+  </script>
+</body>
+
+</html>
